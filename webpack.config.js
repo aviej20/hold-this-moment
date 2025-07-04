@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+
 
 module.exports = {
   entry: './src/index.js',  // Where Webpack starts bundling
@@ -24,6 +26,11 @@ module.exports = {
     open: true,       // Automatically open in browser
     hot: true,        // Enable hot reloading
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.GEMINI_API_KEY': JSON.stringify(process.env.GEMINI_API_KEY),
+    }),
+  ],
   mode: 'development', // Can be 'production' for minified output
   devtool: 'source-map', // Helps debug in browser dev tools
 };

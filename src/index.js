@@ -152,26 +152,16 @@ function addMessage(sender, text){
 }
 
 async function sendMessage(messageText){
-  const GEMINI_API_KEY = "AIzaSyBIRS1id-L0EmxbqVLKlFSJme90QWKhZSU";
   
- const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
+ const response = await fetch('#', {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      contents: [
-          {
-            role: "user",
-            parts: [{ text: messageText }]
-          }
-        ]
-    })
+    body: JSON.stringify({ message: messageText })
   });
   
   const data = await response.json();
-  
-  console.log("data:" + data);
   
   const botReply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Something went wrong";
   
