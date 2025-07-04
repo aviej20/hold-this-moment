@@ -19,6 +19,11 @@ module.exports = {
       },
     ],
   },
+  devServer: {
+    static: './',     // Serve from the project root
+    open: true,       // Automatically open in browser
+    hot: true,        // Enable hot reloading
+  },
   mode: 'development', // Can be 'production' for minified output
-  devtool: 'source-map', // Optional: helps debug in browser dev tools
+  devtool: 'source-map', // Helps debug in browser dev tools
 };
