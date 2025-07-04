@@ -1,0 +1,13 @@
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+
+# Env files or secrets
+.env
+*.env
+
+# Optional: system/editor files
+.DS_Store
+.vscode/
