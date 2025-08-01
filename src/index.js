@@ -10,6 +10,9 @@ const skipButton = document.querySelector('.btn--skip');
 const splashStyleSheet = document.createElement('style');
 document.head.appendChild(splashStyleSheet);
 
+
+//SPLASH SCREENS FUNCTIONALITY
+
 const spaceBetweenScreens = 4;
 const visibleDuration = 3;
 
@@ -21,9 +24,10 @@ splashScreens.forEach((currVal, index) => {
   const className = `splash-auto-${index}`;
   splashStyleSheet.sheet.insertRule(`
       .${className} {
+        visibility: visible;
         animation: 
           fadeInUp 1.5s ease forwards ${delayIn}s, 
-          fadeOutUp 1s ease forwards ${delayOut}s;
+          fadeOutUp 1s ease forwards ${delayOut}s; 
       }
     `);
 
@@ -32,7 +36,7 @@ splashScreens.forEach((currVal, index) => {
 
 let splashTimeout = setTimeout(() => {
   const splashOverlay = document.querySelector('.splash-container--overlay');
-  splashOverlay.style.opacity = 0;
+  splashOverlay.style.display = 'none';
   
   const mainContainer = document.querySelector('.grid-wrapper');
   mainContainer.style.opacity = 1;
@@ -82,29 +86,12 @@ const input = document.getElementById('user-input');
 
 form.addEventListener("submit", (e) =>{
    e.preventDefault();
-  if(document.querySelector('.main-container__form')) 
-  {
-    createChatHTML(input.value.trim());
-  }
-  else{
-    wireForm();
-  }
+   const message = input.value.trim();
+  if(!message) return;
+
+  createChatHTML(message);
 });
 
-function wireForm (){
-  const form = document.getElementById('chat-form');
-  const input = document.getElementById('user-input');
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const message = input.value.trim();
-   // if(!input) return;
-    addMessage('You', message);
-    sendMessage(message);
-    input.value = '';
-  });
-}
 
 function createChatHTML(firstMessage){
   const chatContainer = document.querySelector('.main-container');
@@ -125,19 +112,28 @@ function createChatHTML(firstMessage){
   chatTextarea.setAttribute('id', 'user-input');
   chatTextarea.setAttribute('rows', '3');
   chatTextarea.setAttribute('name', 'text');
-  chatTextarea.setAttribute('required', '');
+  chatTextarea.required = true;
   chatForm.appendChild(chatTextarea);
   
   
   const sendButton = document.createElement('button');
   sendButton.classList.add('btn', 'chat__button');
-  sendButton.setAttribute('type', 'submit');
+  sendButton.type= 'submit';
   sendButton.innerHTML = "Send";
   chatForm.appendChild(sendButton);
   
   addMessage('You', firstMessage);
   sendMessage(firstMessage);
-  wireForm();
+  
+  //Wire Form
+  chatForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const message = chatTextarea.value.trim();
+    if (!message) return;
+    addMessage('You', message);
+    sendMessage(message);
+    chatTextarea.value = '';
+  });
 }
 
 
@@ -146,24 +142,31 @@ function addMessage(sender, text){
   const chatBox = document.querySelector('.chat-wrapper');
   const para = document.createElement('p');
   
-  para.innerHTML = `${sender + ': '+ text}`;
+  para.innerHTML = `<strong>${sender}</strong>${': ' + text}`;
   
   chatBox.appendChild(para);
 }
 
 async function sendMessage(messageText){
   
- const response = await fetch('#', {
+ const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: "POST",
     headers: {
+      'Authorization': 'Bearer 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',
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ message: messageText })
+    body: JSON.stringify({
+       model: 'mistralai/mistral-7b-instruct',
+         messages: [
+        { role: 'system', content: 'You are a helpful mental health support assistant.' },
+        { role: 'user', content: messageText }
+      ]
+      })
   });
   
   const data = await response.json();
   
-  const botReply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Something went wrong";
+  const botReply = data?.choices?.[0]?.message?.content || "Something went wrong";
   
-  addMessage('Gemini', botReply);
+  addMessage('Therapist Bot', botReply);
 }

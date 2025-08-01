@@ -2,7 +2,8 @@
 
 
 $background: #FFFFFF;
-$primary-color: #500000;
+$primary-color: #13aa65;
+$secondary-color: #70ca70;
 
 *{
   margin: 0;
@@ -43,6 +44,7 @@ body{
 
 .splash {
   opacity: 0;
+  visibility: hidden;
   transform: translateY(0px);
   background-color: $background;
   display: flex;
@@ -63,7 +65,8 @@ body{
   display: grid;
   justify-items: center;
   grid-template-columns: 15% auto 15%;
-  grid-template-rows: .5fr 2fr .5fr;
+  grid-template-rows: .5fr 2fr .25fr;
+  column-gap: 1rem;
   opacity: 0;
   transform: translateY(0px);
   transition: opacity 1s ease;
@@ -81,6 +84,8 @@ body{
       cursor: pointer;
       gap: 5px;
       padding-top: 1rem;
+      background-color: white;
+      transition: transform 0.3s ease;
       span {
         width: 25px;
         height: 3px;
@@ -107,7 +112,7 @@ body{
     grid-column: 1/2;
     grid-row: 2/4;
     .nav-menu{
-      padding: 1rem 0 0 1rem;
+      padding: 1rem 0 0 1.5rem;
       display: flex;
       height: 100%;
       font-size: 2.5rem;
@@ -142,6 +147,21 @@ body{
       }
     }
   }
+
+  .resources-container{
+    grid-column: 3/4;
+    grid-row: 1/2;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-evenly;
+    align-items: center;
+    i{
+      cursor: pointer;
+      font-size: 1.75rem;
+    }
+  }
+
+
   .main-container{
     grid-column: 2/3;
     grid-row: 2/3;
@@ -251,9 +271,9 @@ body{
           width: fit-content;
           transition: 0.3s;
           &:hover{
-            box-shadow: -3px 4px 0px 1px #732f2f;
--webkit-box-shadow: -3px 4px 0px 1px #732f2f;
--moz-box-shadow: -3px 4px 0px 1px #732f2f;
+            box-shadow: -3px 4px 0px 1px $secondary-color; 
+-webkit-box-shadow: -3px 4px 0px 1px $secondary-color;
+-moz-box-shadow: -3px 4px 0px 1px $secondary-color;
             cursor: pointer;
           }
         }
